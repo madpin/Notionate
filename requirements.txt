@@ -1,0 +1,5 @@
+click
+PyYAML
+notion-client
+pytest
+pytest-mock
