@@ -1,0 +1,5 @@
+version: "1.0"
+target_db: customers
+columns:
+  external_id: { as: external_id }
+  Name: { type: title }

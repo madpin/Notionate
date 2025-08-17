@@ -1,0 +1,10 @@
+version: "1.0"
+workspace:
+  parent_page_id: "a_fake_page_id"
+
+databases:
+  - db_key: customers
+    title: "Customers"
+    properties:
+      Name: { type: title }
+      Email: { type: email }

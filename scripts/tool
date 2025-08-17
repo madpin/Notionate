@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+
+import click
+import notion_client
+
+# Add src to the path to allow imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.schema import apply_schema_to_notion, load_schema
+from src.ingestion import ingest_data_to_notion, load_data
+from src.pages import publish_pages_to_notion
+
+
+@click.group()
+def cli():
+    """
+    A tool to automate Notion resource management.
+    """
+    pass
+
+
+@cli.command("apply-schema")
+@click.argument("schema_file", type=click.Path(exists=True, dir_okay=False))
+def apply_schema(schema_file):
+    """
+    Apply a schema to a Notion workspace.
+    """
+    schema = load_schema(schema_file)
+
+    api_key = os.getenv("NOTION_API_KEY")
+    if not api_key:
+        click.echo("Error: NOTION_API_KEY environment variable not set.", err=True)
+        sys.exit(1)
+
+    notion = notion_client.Client(auth=api_key)
+
+    apply_schema_to_notion(schema, notion, dry_run=False)
+    click.echo(f"Successfully applied schema from {schema_file}")
+
+
+@cli.command("ingest")
+@click.argument("data_file", type=click.Path(exists=True, dir_okay=False))
+@click.option("--map", "map_file", type=click.Path(exists=True, dir_okay=False), help="A mapping file for CSV ingestion.")
+def ingest(data_file, map_file):
+    """
+    Ingest data into Notion databases.
+    """
+    data = load_data(data_file)
+    map_config = load_schema(map_file) if map_file else None
+
+    api_key = os.getenv("NOTION_API_KEY")
+    if not api_key:
+        click.echo("Error: NOTION_API_KEY environment variable not set.", err=True)
+        sys.exit(1)
+
+    notion = notion_client.Client(auth=api_key)
+
+    ingest_data_to_notion(data, notion, map_config, dry_run=False)
+    click.echo(f"Successfully ingested data from {data_file}")
+
+
+@cli.command("publish-pages")
+@click.argument("pages_directory", type=click.Path(exists=True, file_okay=False, dir_okay=True))
+def publish_pages(pages_directory):
+    """
+    Publish markdown pages to Notion.
+    """
+    api_key = os.getenv("NOTION_API_KEY")
+    if not api_key:
+        click.echo("Error: NOTION_API_KEY environment variable not set.", err=True)
+        sys.exit(1)
+
+    notion = notion_client.Client(auth=api_key)
+
+    publish_pages_to_notion(pages_directory, notion)
+    click.echo(f"Successfully published pages from {pages_directory}")
+
+
+@cli.command("plan")
+@click.option("--schema", "schema_file", type=click.Path(exists=True, dir_okay=False), help="Schema file to plan.")
+@click.option("--data", "data_file", type=click.Path(exists=True, dir_okay=False), help="Data file to plan.")
+@click.option("--map", "map_file", type=click.Path(exists=True, dir_okay=False), help="A mapping file for CSV ingestion.")
+def plan(schema_file, data_file, map_file):
+    """
+    Show a dry run of what changes would be made.
+    """
+    api_key = os.getenv("NOTION_API_KEY")
+    if not api_key:
+        click.echo("Error: NOTION_API_KEY environment variable not set.", err=True)
+        sys.exit(1)
+
+    notion = notion_client.Client(auth=api_key)
+
+    if not schema_file and not data_file:
+        click.echo("Please provide a schema or data file to plan.", err=True)
+        sys.exit(1)
+
+    if schema_file:
+        schema = load_schema(schema_file)
+        schema_plan = apply_schema_to_notion(schema, notion, dry_run=True)
+        click.echo("\n--- Schema Plan ---")
+        for line in schema_plan:
+            click.echo(line)
+
+    if data_file:
+        data = load_data(data_file)
+        map_config = load_schema(map_file) if map_file else None
+        data_plan = ingest_data_to_notion(data, notion, map_config, dry_run=True)
+        click.echo("\n--- Data Ingestion Plan ---")
+        for line in data_plan:
+            click.echo(line)
+
+
+if __name__ == "__main__":
+    cli()
