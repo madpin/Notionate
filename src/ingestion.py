@@ -16,13 +16,22 @@ def load_data(data_file):
 
 from src.notion_utils import find_database_by_title
 
-def _find_page_by_property(notion_client, db_id, property_name, property_value, property_type='rich_text'):
+def _find_page_by_property(notion_client, db_id, property_name, property_value, property_type):
     """
     Finds a page in a database by a property's value.
     Note: This is a simplified implementation. A robust solution would handle different property types.
     """
+    # Map common property names to their actual names in the database
+    property_name_mapping = {
+        'external_id': 'External ID',
+        'title': 'title'  # Keep as is for title properties
+    }
+    
+    # Use the mapped property name if it exists, otherwise use the original
+    actual_property_name = property_name_mapping.get(property_name, property_name)
+    
     filter_conditions = {
-        "property": property_name,
+        "property": actual_property_name,
         property_type: {
             "equals": property_value
         }
@@ -61,36 +70,46 @@ def _build_page_properties(record, db_id, db_properties, notion_client, create_m
     Builds the page properties for the Notion API from a record.
     """
     page_properties = {}
+    
+    # Map common property names to their actual names in the database
+    property_name_mapping = {
+        'external_id': 'External ID',
+        'title': 'title'  # Keep as is for title properties
+    }
+    
     for key, value in record.items():
-        prop_info = db_properties.get(key)
+        # Map the key to the actual property name in the database
+        actual_key = property_name_mapping.get(key, key)
+        prop_info = db_properties.get(actual_key)
+        
         if not prop_info:
             if key != 'external_id':
-                print(f"Warning: Property '{key}' not found in database schema. Skipping.")
+                print(f"Warning: Property '{actual_key}' not found in database schema. Skipping.")
             continue
 
         prop_type = prop_info['type']
 
-        if key == 'external_id':
-             page_properties[key] = {'rich_text': [{'text': {'content': str(value)}}]}
+        if actual_key == 'External ID':
+             page_properties[actual_key] = {'rich_text': [{'text': {'content': str(value)}}]}
         elif prop_type == 'title':
-            page_properties[key] = {'title': [{'text': {'content': str(value)}}]}
+            page_properties[actual_key] = {'title': [{'text': {'content': str(value)}}]}
         elif prop_type == 'rich_text':
-            page_properties[key] = {'rich_text': [{'text': {'content': str(value)}}]}
+            page_properties[actual_key] = {'rich_text': [{'text': {'content': str(value)}}]}
         elif prop_type == 'number':
-            page_properties[key] = {'number': value}
+            page_properties[actual_key] = {'number': value}
         elif prop_type == 'checkbox':
-            page_properties[key] = {'checkbox': value}
+            page_properties[actual_key] = {'checkbox': value}
         elif prop_type == 'url':
-            page_properties[key] = {'url': value}
+            page_properties[actual_key] = {'url': value}
         elif prop_type == 'email':
-            page_properties[key] = {'email': value}
+            page_properties[actual_key] = {'email': value}
         elif prop_type == 'phone_number':
-            page_properties[key] = {'phone_number': value}
+            page_properties[actual_key] = {'phone_number': value}
         elif prop_type == 'date':
             if isinstance(value, str):
-                page_properties[key] = {'date': {'start': value}}
+                page_properties[actual_key] = {'date': {'start': value}}
             elif isinstance(value, dict):
-                page_properties[key] = {'date': value}
+                page_properties[actual_key] = {'date': value}
         elif prop_type == 'files':
             files_list = []
             for item in value:
@@ -98,15 +117,15 @@ def _build_page_properties(record, db_id, db_properties, notion_client, create_m
                     files_list.append({'name': item.split('/')[-1], 'external': {'url': item}})
                 elif isinstance(item, dict) and 'url' in item:
                     files_list.append({'name': item.get('name', item['url'].split('/')[-1]), 'external': {'url': item['url']}})
-            page_properties[key] = {'files': files_list}
+            page_properties[actual_key] = {'files': files_list}
         elif prop_type == 'select':
             if create_missing_select_options:
-                _ensure_select_options(notion_client, db_id, key, prop_info['select'], [value], prop_type)
-            page_properties[key] = {'select': {'name': value}}
+                _ensure_select_options(notion_client, db_id, actual_key, prop_info['select'], [value], prop_type)
+            page_properties[actual_key] = {'select': {'name': value}}
         elif prop_type == 'multi_select':
             if create_missing_select_options:
-                _ensure_select_options(notion_client, db_id, key, prop_info['multi_select'], value, prop_type)
-            page_properties[key] = {'multi_select': [{'name': v} for v in value]}
+                _ensure_select_options(notion_client, db_id, actual_key, prop_info['multi_select'], value, prop_type)
+            page_properties[actual_key] = {'multi_select': [{'name': v} for v in value]}
         elif prop_type == 'relation':
             related_pages_ids = []
             values = value if isinstance(value, list) else [value]
@@ -126,7 +145,7 @@ def _build_page_properties(record, db_id, db_properties, notion_client, create_m
 
                     # For now, this part is too complex to implement fully without more info.
                     # We will just show a warning.
-                    print(f"Warning: Relation property '{key}' is not fully supported yet. Skipping.")
+                    print(f"Warning: Relation property '{actual_key}' is not fully supported yet. Skipping.")
 
     return page_properties
 
@@ -163,6 +182,15 @@ def ingest_data_to_notion(data, notion_client, map_config=None, dry_run=False):
     if isinstance(data, dict):
         defaults = data.get('defaults', {})
         data_items = data.get('data', {})
+        
+        # Handle new structure where each database can specify its own match_on
+        for db_key, db_data in data_items.items():
+            if isinstance(db_data, dict) and 'records' in db_data:
+                # New structure: db_data has match_on and records
+                data_items[db_key] = db_data['records']
+                # Store the match_on for this database
+                if 'match_on' in db_data:
+                    defaults[f'{db_key}_match_on'] = db_data['match_on']
     # Handle CSV data
     elif isinstance(data, list):
         if not map_config:
@@ -177,8 +205,10 @@ def ingest_data_to_notion(data, notion_client, map_config=None, dry_run=False):
     else:
         raise ValueError("Unsupported data format.")
 
-    match_on = defaults.get('match_on', 'external_id')
     create_missing_select_options = defaults.get('create_missing_select_options', True)
+    
+    # Map common property names to their actual names in the database
+    property_name_mapping = {'external_id': 'External ID', 'title': 'title', 'Brand': 'Brand'}
 
     for db_key, records in data_items.items():
         if dry_run:
@@ -198,17 +228,38 @@ def ingest_data_to_notion(data, notion_client, map_config=None, dry_run=False):
 
         db_id = db['id']
         db_properties = db.get('properties', {})
+        
+        # Debug: Print available properties
+        print(f"Available properties in database '{db_key}': {list(db_properties.keys())}")
+        if 'external_id' in [record.get('external_id') for record in records]:
+            print(f"Looking for 'external_id' property, mapped to: {property_name_mapping.get('external_id', 'external_id')}")
+            if 'External ID' in db_properties:
+                print(f"'External ID' property found with type: {db_properties['External ID']['type']}")
+            else:
+                print("'External ID' property NOT found in database")
 
         for record in records:
-            match_value = record.get(match_on)
+            # Get the match_on key for this specific database
+            db_match_on = defaults.get(f'{db_key}_match_on', 'external_id')
+            match_value = record.get(db_match_on)
             if not match_value:
-                print(f"Warning: Record is missing match key '{match_on}'. Skipping.")
+                print(f"Warning: Record is missing match key '{db_match_on}'. Skipping.")
                 continue
 
             existing_page = None
             if not dry_run:
-                prop_type = 'title' if match_on == 'title' else 'rich_text'
-                existing_page = _find_page_by_property(notion_client, db_id, match_on, match_value, prop_type)
+                # Map the match_on property name to the actual property name in the database
+                actual_match_property = property_name_mapping.get(db_match_on, db_match_on)
+                
+                # Get the property info from the database to determine the correct type
+                match_prop_info = db_properties.get(actual_match_property)
+                if match_prop_info:
+                    prop_type = match_prop_info['type']
+                else:
+                    # Fallback to default types
+                    prop_type = 'title' if db_match_on == 'title' else 'rich_text'
+                
+                existing_page = _find_page_by_property(notion_client, db_id, db_match_on, match_value, prop_type)
 
             if dry_run:
                 # In dry-run, we don't build properties as it might try to update a schema
@@ -218,16 +269,16 @@ def ingest_data_to_notion(data, notion_client, map_config=None, dry_run=False):
 
             if existing_page:
                 if dry_run:
-                    plan.append(f"  - Plan to UPDATE page in '{db_key}' (matched on {match_on}: {match_value})")
+                    plan.append(f"  - Plan to UPDATE page in '{db_key}' (matched on {db_match_on}: {match_value})")
                 else:
-                    print(f"Updating page in '{db_key}' (matched on {match_on}: {match_value})...")
+                    print(f"Updating page in '{db_key}' (matched on {db_match_on}: {match_value})...")
                     _update_page(notion_client, existing_page['id'], page_properties)
                     print(f"Successfully updated page.")
             else:
                 if dry_run:
-                    plan.append(f"  - Plan to CREATE page in '{db_key}' ({match_on}: {match_value})")
+                    plan.append(f"  - Plan to CREATE page in '{db_key}' ({db_match_on}: {match_value})")
                 else:
-                    print(f"Creating page in '{db_key}' ({match_on}: {match_value})...")
+                    print(f"Creating page in '{db_key}' ({db_match_on}: {match_value})...")
                     notion_client.pages.create(parent={"database_id": db_id}, properties=page_properties)
                     print(f"Successfully created page.")
 

@@ -1,0 +1,301 @@
+version: "1.0"
+defaults:
+  create_missing_select_options: true
+
+data:
+  brands:
+    match_on: Brand
+    records:
+      - external_id: "brand-tesla"
+        Brand: "Tesla"
+        Category: "American"
+        "Global Share 2024 (%)": 2.1
+        "Global Sales 2024 (M)": 1.8
+        "CR Reliability (0–100)": 40
+        "Owner Satisfaction (%)": 98
+        "IE Sales 2022": 1200
+        "IE Share 2022 (%)": 0.8
+        Strengths: "Leading EV technology, Supercharger network, Autopilot, high performance"
+        Weaknesses: "Build quality issues, expensive, limited service network in Ireland"
+        "EV Focus": true
+        Premium: true
+        Value: false
+        Country: "USA"
+        Website: "https://www.tesla.com"
+        Notes: "Strong brand recognition but limited dealer presence in Ireland"
+
+      - external_id: "brand-bmw"
+        Brand: "BMW"
+        Category: "European"
+        "Global Share 2024 (%)": 2.8
+        "Global Sales 2024 (M)": 2.4
+        "CR Reliability (0–100)": 65
+        "Owner Satisfaction (%)": 85
+        "IE Sales 2022": 8500
+        "IE Share 2022 (%)": 5.2
+        Strengths: "Sporty driving dynamics, premium quality, strong dealer network, good EV options"
+        Weaknesses: "Expensive maintenance, complex technology, depreciation"
+        "EV Focus": true
+        Premium: true
+        Value: false
+        Country: "Germany"
+        Website: "https://www.bmw.ie"
+        Notes: "Popular premium brand with strong presence in Irish market"
+
+      - external_id: "brand-toyota"
+        Brand: "Toyota"
+        Category: "Japanese"
+        "Global Share 2024 (%)": 8.5
+        "Global Sales 2024 (M)": 7.2
+        "CR Reliability (0–100)": 88
+        "Owner Satisfaction (%)": 82
+        "IE Sales 2022": 12000
+        "IE Share 2022 (%)": 7.3
+        Strengths: "Excellent reliability, strong hybrid technology, good resale value, comprehensive dealer network"
+        Weaknesses: "Conservative styling, limited performance models, expensive hybrid options"
+        "EV Focus": false
+        Premium: false
+        Value: true
+        Country: "Japan"
+        Website: "https://www.toyota.ie"
+        Notes: "Market leader in Ireland with strong hybrid focus"
+
+      - external_id: "brand-volkswagen"
+        Brand: "Volkswagen"
+        Category: "European"
+        "Global Share 2024 (%)": 4.2
+        "Global Sales 2024 (M)": 3.6
+        "CR Reliability (0–100)": 70
+        "Owner Satisfaction (%)": 78
+        "IE Sales 2022": 9500
+        "IE Share 2022 (%)": 5.8
+        Strengths: "Good build quality, wide model range, strong dealer network, good EV options"
+        Weaknesses: "Diesel scandal legacy, expensive options, some reliability issues"
+        "EV Focus": true
+        Premium: false
+        Value: true
+        Country: "Germany"
+        Website: "https://www.volkswagen.ie"
+        Notes: "Popular family car choice with strong ID electric range"
+
+  models:
+    match_on: "External ID"
+    records:
+      - external_id: "model-tesla-model3"
+        Model: "Tesla Model 3"
+        "Year Introduced": 2017
+        "Fuel Type": "Electric"
+        "Engine Size (L)": 0
+        "Motor Power (kW)": 283
+        "Battery Capacity (kWh)": 75
+        "Range (WLTP km)": 491
+        "CO2 (g/km)": 0
+        "Annual Motor Tax (EUR)": 0
+        "Body Type": "Sedan"
+        Transmission: "Automatic"
+        Drivetrain: "RWD"
+        Seats: 5
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "Rear Camera", "Parking Sensors", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        "External ID": "TESLA-MODEL3-2024"
+        Notes: "Best-selling electric car globally, excellent performance and technology"
+
+      - external_id: "model-bmw-3series"
+        Model: "BMW 3 Series"
+        "Year Introduced": 2019
+        "Fuel Type": "Petrol"
+        "Engine Size (L)": 2.0
+        "Motor Power (kW)": 0
+        "Battery Capacity (kWh)": 0
+        "Range (WLTP km)": 0
+        "CO2 (g/km)": 145
+        "Annual Motor Tax (EUR)": 280
+        "Body Type": "Sedan"
+        Transmission: "Automatic"
+        Drivetrain: "RWD"
+        Seats: 5
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "360 Camera", "Rear Camera", "Parking Sensors", "Blind Spot Monitor", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        "External ID": "BMW-3SERIES-2024"
+        Notes: "Premium compact executive sedan with excellent driving dynamics"
+
+      - external_id: "model-toyota-camry"
+        Model: "Toyota Camry"
+        "Year Introduced": 2018
+        "Fuel Type": "Hybrid"
+        "Engine Size (L)": 2.5
+        "Motor Power (kW)": 88
+        "Battery Capacity (kWh)": 1.6
+        "Range (WLTP km)": 0
+        "CO2 (g/km)": 98
+        "Annual Motor Tax (EUR)": 180
+        "Body Type": "Sedan"
+        Transmission: "Automatic"
+        Drivetrain: "FWD"
+        Seats: 5
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "Rear Camera", "Parking Sensors", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        "External ID": "TOYOTA-CAMRY-2024"
+        Notes: "Reliable hybrid sedan with excellent fuel economy"
+
+      - external_id: "model-vw-id4"
+        Model: "Volkswagen ID.4"
+        "Year Introduced": 2021
+        "Fuel Type": "Electric"
+        "Engine Size (L)": 0
+        "Motor Power (kW)": 150
+        "Battery Capacity (kWh)": 77
+        "Range (WLTP km)": 520
+        "CO2 (g/km)": 0
+        "Annual Motor Tax (EUR)": 0
+        "Body Type": "SUV"
+        Transmission: "Automatic"
+        Drivetrain: "RWD"
+        Seats: 5
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Ventilated Seats", "Panoramic Roof", "Navigation", "360 Camera", "Rear Camera", "Parking Sensors", "Blind Spot Monitor", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry", "Wireless Charging"]
+        "External ID": "VW-ID4-2024"
+        Notes: "Practical electric SUV with good range and family-friendly design"
+
+  cars:
+    match_on: "External ID"
+    records:
+      - external_id: "car-tesla-model3-001"
+        "Listing Title": "2024 Tesla Model 3 Long Range - Electric Sedan"
+        Condition: "New"
+        "Registration (Plate)": "24-D-12345"
+        "Reg Year": 2024
+        "Mileage (km)": 0
+        "Price (EUR)": 54990
+        Color: "White"
+        Owners: 1
+        "NCT Expiry": "2027-01-15"
+        "Tax Expiry": "2027-01-15"
+        "Warranty Until": "2029-01-15"
+        "Fuel Type": "Electric"
+        Transmission: "Automatic"
+        "Body Type": "Sedan"
+        "Engine Size (L)": 0
+        "Motor Power (kW)": 283
+        "Battery Capacity (kWh)": 75
+        "Range (WLTP km)": 491
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "Rear Camera", "Parking Sensors", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        County: "Dublin"
+        Address: "Tesla Store, Dundrum Town Centre, Dublin 16"
+        URL: "https://www.tesla.com/model3"
+        Photos: ["https://example.com/tesla-model3-1.jpg", "https://example.com/tesla-model3-2.jpg"]
+        "External ID": "TESLA-MODEL3-001"
+        Description: "Brand new Tesla Model 3 Long Range in pristine condition. Features include Autopilot, premium interior, and 491km range. Available for immediate delivery."
+
+      - external_id: "car-bmw-3series-001"
+        "Listing Title": "2023 BMW 320i M Sport - Premium Executive Sedan"
+        Condition: "Used"
+        "Registration (Plate)": "23-D-67890"
+        "Reg Year": 2023
+        "Mileage (km)": 15000
+        "Price (EUR)": 45990
+        Color: "Black"
+        Owners: 1
+        "NCT Expiry": "2026-03-20"
+        "Tax Expiry": "2026-03-20"
+        "Warranty Until": "2026-03-20"
+        "Fuel Type": "Petrol"
+        Transmission: "Automatic"
+        "Body Type": "Sedan"
+        "Engine Size (L)": 2.0
+        "Motor Power (kW)": 0
+        "Battery Capacity (kWh)": 0
+        "Range (WLTP km)": 0
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "360 Camera", "Rear Camera", "Parking Sensors", "Blind Spot Monitor", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        County: "Dublin"
+        Address: "Joe Duffy BMW, Naas Road, Dublin 22"
+        URL: "https://www.joeduffybmw.ie"
+        Photos: ["https://example.com/bmw-3series-1.jpg", "https://example.com/bmw-3series-2.jpg"]
+        "External ID": "BMW-3SERIES-001"
+        Description: "Excellent condition BMW 320i M Sport with full service history. M Sport package includes sport suspension, M steering wheel, and sport seats. Low mileage and well maintained."
+
+      - external_id: "car-toyota-camry-001"
+        "Listing Title": "2022 Toyota Camry Hybrid - Reliable Family Sedan"
+        Condition: "Used"
+        "Registration (Plate)": "22-D-24680"
+        "Reg Year": 2022
+        "Mileage (km)": 35000
+        "Price (EUR)": 32990
+        Color: "Silver"
+        Owners: 1
+        "NCT Expiry": "2025-08-10"
+        "Tax Expiry": "2025-08-10"
+        "Warranty Until": "2027-08-10"
+        "Fuel Type": "Hybrid"
+        Transmission: "Automatic"
+        "Body Type": "Sedan"
+        "Engine Size (L)": 2.5
+        "Motor Power (kW)": 88
+        "Battery Capacity (kWh)": 1.6
+        "Range (WLTP km)": 0
+        Features: ["Adaptive Cruise", "Apple CarPlay", "Android Auto", "Leather Seats", "Heated Seats", "Navigation", "Rear Camera", "Parking Sensors", "Lane Keep Assist", "Auto Emergency Braking", "Keyless Entry"]
+        County: "Cork"
+        Address: "Toyota Cork, Kinsale Road, Cork"
+        URL: "https://www.toyota.ie"
+        Photos: ["https://example.com/toyota-camry-1.jpg", "https://example.com/toyota-camry-2.jpg"]
+        "External ID": "TOYOTA-CAMRY-001"
+        Description: "Well-maintained Toyota Camry Hybrid with excellent fuel economy. Full service history, one owner, and in great condition throughout. Perfect family car with low running costs."
+
+  dealerships:
+    match_on: "Name"
+    records:
+      - external_id: "dealer-tesla-dublin"
+        Name: "Tesla Store Dublin"
+        Phone: "+353 1 234 5678"
+        Email: "dublin@tesla.com"
+        Website: "https://www.tesla.com"
+        "Address Line 1": "Tesla Store"
+        "Address Line 2": "Dundrum Town Centre"
+        "City/Town": "Dublin"
+        County: "Dublin"
+        Eircode: "D16 XF68"
+        Latitude: 53.2905
+        Longitude: -6.2488
+        Rating: 4.2
+        Notes: "Official Tesla store with showroom and service center"
+
+      - external_id: "dealer-bmw-joe-duffy"
+        Name: "Joe Duffy BMW"
+        Phone: "+353 1 456 7890"
+        Email: "info@joeduffybmw.ie"
+        Website: "https://www.joeduffybmw.ie"
+        "Address Line 1": "Naas Road"
+        "Address Line 2": "Bluebell"
+        "City/Town": "Dublin"
+        County: "Dublin"
+        Eircode: "D22 X4H9"
+        Latitude: 53.3347
+        Longitude: -6.3775
+        Rating: 4.5
+        Notes: "Large BMW dealership with extensive inventory and service facilities"
+
+      - external_id: "dealer-toyota-cork"
+        Name: "Toyota Cork"
+        Phone: "+353 21 234 5678"
+        Email: "cork@toyota.ie"
+        Website: "https://www.toyota.ie"
+        "Address Line 1": "Kinsale Road"
+        "Address Line 2": "Togher"
+        "City/Town": "Cork"
+        County: "Cork"
+        Eircode: "T12 X4H9"
+        Latitude: 51.8969
+        Longitude: -8.4863
+        Rating: 4.3
+        Notes: "Full-service Toyota dealership serving Cork and surrounding areas"
+
+      - external_id: "dealer-vw-cork"
+        Name: "Volkswagen Cork"
+        Phone: "+353 21 345 6789"
+        Email: "cork@volkswagen.ie"
+        Website: "https://www.volkswagen.ie"
+        "Address Line 1": "Model Farm Road"
+        "Address Line 2": "Bishopstown"
+        "City/Town": "Cork"
+        County: "Cork"
+        Eircode: "T12 X5H9"
+        Latitude: 51.8769
+        Longitude: -8.5263
+        Rating: 4.1
+        Notes: "Volkswagen dealership with electric vehicle expertise"

@@ -37,7 +37,20 @@ def _build_properties(schema_properties):
         elif prop_type == 'rich_text':
             notion_properties[name] = {"rich_text": {}}
         elif prop_type == 'number':
-            notion_properties[name] = {"number": {"format": prop.get('format', 'number')}}
+            format_value = prop.get('format', 'number')
+            # Validate number format values for Notion API
+            valid_formats = [
+                'number', 'number_with_commas', 'percent', 'dollar', 'australian_dollar',
+                'canadian_dollar', 'singapore_dollar', 'euro', 'pound', 'yen', 'ruble',
+                'rupee', 'won', 'yuan', 'real', 'lira', 'rupiah', 'franc', 'hong_kong_dollar',
+                'new_zealand_dollar', 'krona', 'norwegian_krone', 'mexican_peso', 'rand',
+                'new_taiwan_dollar', 'danish_krone', 'zloty', 'baht', 'forint', 'koruna',
+                'shekel', 'chilean_peso', 'philippine_peso', 'dirham', 'colombian_peso',
+                'riyal', 'ringgit', 'leu', 'argentine_peso', 'uruguayan_peso', 'peruvian_sol'
+            ]
+            if format_value not in valid_formats:
+                raise ValueError(f"Invalid number format '{format_value}' for property '{name}'. Valid formats are: {', '.join(valid_formats)}")
+            notion_properties[name] = {"number": {"format": format_value}}
         elif prop_type == 'select':
             notion_properties[name] = {"select": {"options": prop.get('options', [])}}
         elif prop_type == 'multi_select':
@@ -155,13 +168,20 @@ def apply_schema_to_notion(schema, notion_client, dry_run=False):
         relation_property = {
             "type": "relation",
             "relation": {
-                "database_id": to_db_id
+                "database_id": to_db_id,
+                "single_property": {}  # Use single_property for one-way relations
             }
         }
 
         synced_property_name = relation_config.get('synced_property_name')
         if synced_property_name:
-            relation_property['relation']['synced_property_name'] = synced_property_name
+            # If we have a synced property name, it's a dual relation
+            relation_property['relation'] = {
+                "database_id": to_db_id,
+                "dual_property": {
+                    "synced_property_name": synced_property_name
+                }
+            }
 
         if dry_run:
             plan.append(f"  - Plan to CREATE RELATION '{property_name}' on '{from_db_key}' to '{to_db_key}'")

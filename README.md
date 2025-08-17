@@ -75,7 +75,7 @@ The following property types are supported:
 
 *   `title`
 *   `rich_text`
-*   `number` (can include a `format` key: `number`, `currency`, or `percent`)
+*   `number` (can include a `format` key: `number`, `percent`, or specific currency formats like `dollar`, `euro`, `pound`, etc.)
 *   `select` (must include an `options` list of `{name, color?}` objects)
 *   `multi_select` (must include an `options` list of `{name, color?}` objects)
 *   `date`
@@ -120,7 +120,7 @@ databases:
     title: "Orders"
     properties:
       Order Number: { type: title }
-      Amount: { type: number, format: currency }
+      Amount: { type: number, format: dollar }
       Paid: { type: checkbox }
 
 relations:

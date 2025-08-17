@@ -1,0 +1,300 @@
+version: "1.0"
+workspace:
+  parent_page_id: "251b90822b598083acabfc35a5cd6047"
+
+databases:
+  - db_key: brands
+    title: "Brands"
+    match: { by: title, value: "Brands" }
+    update_mode: merge
+    properties:
+      Brand: { type: title }
+      Category:
+        type: select
+        options:
+          - { name: "Chinese" }
+          - { name: "European" }
+          - { name: "American" }
+          - { name: "Japanese" }
+          - { name: "Korean" }
+          - { name: "Other" }
+      "Global Share 2024 (%)": { type: number }
+      "Global Sales 2024 (M)": { type: number }
+      "CR Reliability (0–100)": { type: number }
+      "Owner Satisfaction (%)": { type: number }
+      "IE Sales 2022": { type: number }
+      "IE Share 2022 (%)": { type: number }
+      Strengths: { type: rich_text }
+      Weaknesses: { type: rich_text }
+      "EV Focus": { type: checkbox }
+      Premium: { type: checkbox }
+      Value: { type: checkbox }
+      Country:
+        type: select
+        options:
+          - { name: "China" }
+          - { name: "Germany" }
+          - { name: "USA" }
+          - { name: "Japan" }
+          - { name: "Korea" }
+          - { name: "Sweden" }
+          - { name: "France" }
+          - { name: "Italy" }
+          - { name: "UK" }
+          - { name: "Other" }
+      Website: { type: url }
+      Notes: { type: rich_text }
+
+  - db_key: models
+    title: "Models"
+    match: { by: title, value: "Models" }
+    update_mode: merge
+    properties:
+      Model: { type: title }
+      "Year Introduced": { type: number }
+      "Fuel Type":
+        type: select
+        options:
+          - { name: "Petrol" }
+          - { name: "Diesel" }
+          - { name: "Hybrid" }
+          - { name: "Plug-in Hybrid" }
+          - { name: "Electric" }
+      "Engine Size (L)": { type: number }
+      "Motor Power (kW)": { type: number }
+      "Battery Capacity (kWh)": { type: number }
+      "Range (WLTP km)": { type: number }
+      "CO2 (g/km)": { type: number }
+      "Annual Motor Tax (EUR)": { type: number, format: euro }
+      "Body Type":
+        type: select
+        options:
+          - { name: "Hatchback" }
+          - { name: "Sedan" }
+          - { name: "SUV" }
+          - { name: "Coupe" }
+          - { name: "Convertible" }
+          - { name: "Estate" }
+          - { name: "MPV" }
+          - { name: "Pickup" }
+          - { name: "Van" }
+      Transmission:
+        type: select
+        options:
+          - { name: "Manual" }
+          - { name: "Automatic" }
+      Drivetrain:
+        type: select
+        options:
+          - { name: "FWD" }
+          - { name: "RWD" }
+          - { name: "AWD" }
+      Seats: { type: number }
+      Features:
+        type: multi_select
+        options:
+          - { name: "Adaptive Cruise" }
+          - { name: "Apple CarPlay" }
+          - { name: "Android Auto" }
+          - { name: "Leather Seats" }
+          - { name: "Heated Seats" }
+          - { name: "Ventilated Seats" }
+          - { name: "Panoramic Roof" }
+          - { name: "Sunroof" }
+          - { name: "Navigation" }
+          - { name: "360 Camera" }
+          - { name: "Rear Camera" }
+          - { name: "Parking Sensors" }
+          - { name: "Blind Spot Monitor" }
+          - { name: "Lane Keep Assist" }
+          - { name: "Auto Emergency Braking" }
+          - { name: "Keyless Entry" }
+          - { name: "Wireless Charging" }
+      "External ID": { type: rich_text }
+      Notes: { type: rich_text }
+
+  - db_key: cars
+    title: "Cars"
+    match: { by: title, value: "Cars" }
+    update_mode: merge
+    properties:
+      "Listing Title": { type: title }
+      Condition:
+        type: select
+        options:
+          - { name: "New" }
+          - { name: "Used" }
+      "Registration (Plate)": { type: rich_text }
+      "Reg Year": { type: number }
+      "Mileage (km)": { type: number }
+      "Price (EUR)": { type: number, format: euro }
+      Color:
+        type: select
+        options:
+          - { name: "Black" }
+          - { name: "White" }
+          - { name: "Grey" }
+          - { name: "Silver" }
+          - { name: "Blue" }
+          - { name: "Red" }
+          - { name: "Green" }
+          - { name: "Other" }
+      Owners: { type: number }
+      "NCT Expiry": { type: date }
+      "Tax Expiry": { type: date }
+      "Warranty Until": { type: date }
+      "Fuel Type":
+        type: select
+        options:
+          - { name: "Petrol" }
+          - { name: "Diesel" }
+          - { name: "Hybrid" }
+          - { name: "Plug-in Hybrid" }
+          - { name: "Electric" }
+      Transmission:
+        type: select
+        options:
+          - { name: "Manual" }
+          - { name: "Automatic" }
+      "Body Type":
+        type: select
+        options:
+          - { name: "Hatchback" }
+          - { name: "Sedan" }
+          - { name: "SUV" }
+          - { name: "Coupe" }
+          - { name: "Convertible" }
+          - { name: "Estate" }
+          - { name: "MPV" }
+          - { name: "Pickup" }
+          - { name: "Van" }
+      "Engine Size (L)": { type: number }
+      "Motor Power (kW)": { type: number }
+      "Battery Capacity (kWh)": { type: number }
+      "Range (WLTP km)": { type: number }
+      Features:
+        type: multi_select
+        options:
+          - { name: "Adaptive Cruise" }
+          - { name: "Apple CarPlay" }
+          - { name: "Android Auto" }
+          - { name: "Leather Seats" }
+          - { name: "Heated Seats" }
+          - { name: "Ventilated Seats" }
+          - { name: "Panoramic Roof" }
+          - { name: "Sunroof" }
+          - { name: "Navigation" }
+          - { name: "360 Camera" }
+          - { name: "Rear Camera" }
+          - { name: "Parking Sensors" }
+          - { name: "Blind Spot Monitor" }
+          - { name: "Lane Keep Assist" }
+          - { name: "Auto Emergency Braking" }
+          - { name: "Keyless Entry" }
+          - { name: "Wireless Charging" }
+      County:
+        type: select
+        options:
+          - { name: "Carlow" }
+          - { name: "Cavan" }
+          - { name: "Clare" }
+          - { name: "Cork" }
+          - { name: "Donegal" }
+          - { name: "Dublin" }
+          - { name: "Galway" }
+          - { name: "Kerry" }
+          - { name: "Kildare" }
+          - { name: "Kilkenny" }
+          - { name: "Laois" }
+          - { name: "Leitrim" }
+          - { name: "Limerick" }
+          - { name: "Longford" }
+          - { name: "Louth" }
+          - { name: "Mayo" }
+          - { name: "Meath" }
+          - { name: "Monaghan" }
+          - { name: "Offaly" }
+          - { name: "Roscommon" }
+          - { name: "Sligo" }
+          - { name: "Tipperary" }
+          - { name: "Waterford" }
+          - { name: "Westmeath" }
+          - { name: "Wexford" }
+          - { name: "Wicklow" }
+      Address: { type: rich_text }
+      URL: { type: url }
+      Photos: { type: files }
+      "External ID": { type: rich_text }
+      Description: { type: rich_text }
+
+  - db_key: dealerships
+    title: "Dealerships"
+    match: { by: title, value: "Dealerships" }
+    update_mode: merge
+    properties:
+      Name: { type: title }
+      Phone: { type: phone_number }
+      Email: { type: email }
+      Website: { type: url }
+      "Address Line 1": { type: rich_text }
+      "Address Line 2": { type: rich_text }
+      "City/Town": { type: rich_text }
+      County:
+        type: select
+        options:
+          - { name: "Carlow" }
+          - { name: "Cavan" }
+          - { name: "Clare" }
+          - { name: "Cork" }
+          - { name: "Donegal" }
+          - { name: "Dublin" }
+          - { name: "Galway" }
+          - { name: "Kerry" }
+          - { name: "Kildare" }
+          - { name: "Kilkenny" }
+          - { name: "Laois" }
+          - { name: "Leitrim" }
+          - { name: "Limerick" }
+          - { name: "Longford" }
+          - { name: "Louth" }
+          - { name: "Mayo" }
+          - { name: "Meath" }
+          - { name: "Monaghan" }
+          - { name: "Offaly" }
+          - { name: "Roscommon" }
+          - { name: "Sligo" }
+          - { name: "Tipperary" }
+          - { name: "Waterford" }
+          - { name: "Westmeath" }
+          - { name: "Wexford" }
+          - { name: "Wicklow" }
+      Eircode: { type: rich_text }
+      Latitude: { type: number }
+      Longitude: { type: number }
+      Rating: { type: number }
+      Notes: { type: rich_text }
+
+relations:
+  # Link models → brands (and back)
+  - from_db: models
+    property_name: "Brand"
+    to_db: brands
+    synced_property_name: "Models"
+
+  # Link cars → models (and back)
+  - from_db: cars
+    property_name: "Model"
+    to_db: models
+    synced_property_name: "Cars"
+
+  # Link cars → dealerships (and back)
+  - from_db: cars
+    property_name: "Dealer"
+    to_db: dealerships
+    synced_property_name: "Cars"
+
+  # Link dealerships → brands (and back)
+  - from_db: dealerships
+    property_name: "Brand"
+    to_db: brands
+    synced_property_name: "Dealerships"
