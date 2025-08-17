@@ -4,3 +4,4 @@ notion-client
 pytest
 pytest-mock
 markdown-it-py
+linkify-it-py
